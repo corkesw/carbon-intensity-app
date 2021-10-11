@@ -17,6 +17,7 @@ function App() {
         postcode={postcode}
         setIsLoading={setIsLoading}
         isLoading={isLoading}
+        results={results}
       />
       <ResultsDisplay results={results} isLoading={isLoading} />
     </div>

@@ -6,8 +6,9 @@ function SearchBox({
   setResults,
   setIsLoading,
   isLoading,
+  results
 }) {
-  console.log(`<<<<<<<< searchBox`, isLoading);
+  
   const [date, setDate] = useState("");
   const [inputDate, setInputDate] = useState("");
 
@@ -44,7 +45,7 @@ function SearchBox({
           return response.json();
         })
         .then((result) => {
-          setResults(result.data);
+          setResults(result.data)
         })
         .finally(() => {
           setIsLoading(false);

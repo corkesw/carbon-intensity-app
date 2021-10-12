@@ -1,4 +1,5 @@
 function Header({ results, date }) {
+  
   if (results.shortname) {
     return (
       <section className="header">

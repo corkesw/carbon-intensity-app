@@ -12,13 +12,22 @@ function SearchBox({
   const postcodeRegex = /^[a-z]{1,2}\d{1,2}$/i;
   const [postcodeError, setPostcodeError] = useState(false);
   const [postcodeSearch, setPostcodeSearch] = useState("");
-
+  const [dateError, setDateError] = useState(false);
+ 
   function updatePostcode(e) {
     setPostcodeSearch(e.target.value);
+
   }
 
   function updateDate(e) {
-    setInputDate(e.target.value);
+    if (fullDate < e.target.value) {
+      setInputDate(fullDate)
+      setDateError(true)
+
+    } else {
+      setInputDate(e.target.value)
+      setDateError(false);
+    }
   }
 
   function handleSubmit(e) {
@@ -35,7 +44,8 @@ function SearchBox({
   }
 
   useEffect(() => {
-    if (postcode) {
+    console.log('useEffect', date, postcode)
+    if (postcode && date) {
       setIsLoading(true);
       fetch(
         `https://api.carbonintensity.org.uk/regional/intensity/${date}T00:00Z/fw24h/postcode/${postcode}`
@@ -43,14 +53,32 @@ function SearchBox({
         .then((response) => {
           return response.json();
         })
-        .then((result) => {
-          setResults(result.data);
+        .then((result) => {      
+            setResults(result.data)
+        })
+        .catch((error) => {
+          setResults(['error'])
+          console.log(error)
         })
         .finally(() => {
           setIsLoading(false);
         });
     }
-  }, [postcode]);
+  }, [postcode, date]);
+
+
+
+
+  const mydate = new Date();
+    mydate.setDate(mydate.getDate() - 1);
+
+    const day = mydate.getDate();
+    const month = ("0" + (mydate.getMonth() + 1)).slice(-2)
+    const year = mydate.getFullYear();
+
+    const fullDate = year + '-' + month + '-' + day;
+
+  console.log(fullDate)
 
   return (
     <section className="search">
@@ -64,12 +92,13 @@ function SearchBox({
           value={postcodeSearch}
         ></input>
         <label htmlFor="dateInput">Date: </label>
-        <input onChange={updateDate} id="dateInput" type="date"></input>
-        <button id="submitButton" className="button">
+        <input onChange={updateDate} id="dateInput" type="date" value={inputDate} min="1997-01-01" max={mydate}></input>
+        <button id="submitButton" className="button" disabled={dateError}>
           Submit
         </button>
       </form>
       <p className={`iserror${postcodeError}`}>Please enter valid postcode</p>
+      <p className={`iserror${dateError}`}>Please enter a past date</p>
     </section>
   );
 }

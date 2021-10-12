@@ -2,10 +2,13 @@ import PieChart from "./Pie";
 
 function ResultsDisplay({ results, isLoading }) {
   // results 0 false ----
-
+  if (results) {
   if (Object.keys(results).length === 0 && isLoading === false) {
-    return <p></p>;
-  } else if (isLoading === true) {
+    return <p>Please enter the first part of your postcode</p>;
+  } else if (results[0] === 'error') {
+    return <p>No data found for given postcode</p>
+  } 
+  else if (isLoading === true) {
     return <p>isLoading!!!!</p>;
   } else if (Object.keys(results).length > 0 && isLoading === false) {
     console.log(results); // Hers is where we have the data!!!!!!!\
@@ -68,8 +71,10 @@ function ResultsDisplay({ results, isLoading }) {
         </div>
       </section>
     );
-  } else {
-    return <p>Help!</p>;
+  } 
+  }
+  else {
+    return <p>Please enter valid date</p>;
   }
 }
 

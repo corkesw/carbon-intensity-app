@@ -5,13 +5,10 @@ function SearchBox({
   postcode,
   setResults,
   setIsLoading,
-  isLoading,
-  results
+  date,
+  setDate,
 }) {
-  
-  const [date, setDate] = useState("");
   const [inputDate, setInputDate] = useState("");
-
   const postcodeRegex = /^[a-z]{1,2}\d{1,2}$/i;
   const [postcodeError, setPostcodeError] = useState(false);
   const [postcodeSearch, setPostcodeSearch] = useState("");
@@ -33,6 +30,8 @@ function SearchBox({
     } else {
       setPostcodeError(true);
     }
+    setPostcodeSearch("");
+    setInputDate("");
   }
 
   useEffect(() => {
@@ -45,7 +44,7 @@ function SearchBox({
           return response.json();
         })
         .then((result) => {
-          setResults(result.data)
+          setResults(result.data);
         })
         .finally(() => {
           setIsLoading(false);
